@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>To-Do List App</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="style.css">  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
+  <script>
+    $(function() {
+      $( "#sortable" ).sortable(); 
+    });
+
+    function addTask() {
+      const taskText = $("#task-input").val();
+
+      if (taskText) {
+        const newListItem = $('<li class="ui-state-default"><span class="ui-icon ui-icon-pin-w"></span>' + taskText + '</li>');
+        newListItem.append('<button class="delete-task"> x </button>');
+        $("#sortable").append(newListItem);
+        $("#task-input").val("");
+
+        
+        storeTask(taskText); 
+      }
+    }
+
+    $(document).on('click', '.delete-task', function() {
+      $(this).parent().remove(); 
+    });
+    function storeTask(taskText) {
+  const tasks = getTasks(); 
+  tasks.push({ text: taskText }); 
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+    $(document).on('change', 'input[type="checkbox"]', function() {
+    if ($(this).is(':checked')) {
+      $(this).parent().addClass('completed');
+    } else {
+      $(this).parent().removeClass('completed');
+    }
+  });
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="todo-app">
+      <h2>To-Do List</h2>
+      <div class="row">
+        <input type="text" id="task-input" placeholder="Add a new task">
+        <button onclick="addTask()">Add</button>
+      </div>
+      <ul id="sortable">
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
